@@ -9,13 +9,14 @@ function createWindow() {
         height: 768,
         webPreferences: {
             nodeIntegration: true
-        }
+        },
+        title: 'zebra'
     });
-    mainWindow.loadFile(path.join(__dirname, "../app.html"));
-    mainWindow.webContents.openDevTools({ mode: "detach" });
-    mainWindow.on("closed", function () {
+    mainWindow.loadFile(path.join(__dirname, '../app.html'));
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
+    mainWindow.on('closed', function () {
         mainWindow = null;
     });
 }
-electron_1.app.on("ready", createWindow);
+electron_1.app.on('ready', createWindow);
 //# sourceMappingURL=main.js.map

@@ -1,5 +1,5 @@
-import { app, BrowserWindow } from "electron";
-import * as path from "path";
+import { app, BrowserWindow } from 'electron';
+import * as path from 'path';
 
 let mainWindow: Electron.BrowserWindow;
 
@@ -7,18 +7,19 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
-    webPreferences:{
+    webPreferences: {
       nodeIntegration: true,
-    }
+    },
+    title: 'zebra',
   });
 
-  mainWindow.loadFile(path.join(__dirname, "../app.html"));
+  mainWindow.loadFile(path.join(__dirname, '../app.html'));
 
-  mainWindow.webContents.openDevTools({mode: "detach"});
+  mainWindow.webContents.openDevTools({mode: 'detach'});
 
-  mainWindow.on("closed", () => {
+  mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
 
-app.on("ready", createWindow);
+app.on('ready', createWindow);
