@@ -44,7 +44,9 @@ const devices = {
 const body = {
   view: () => {
     return m('div.body', [
-      m(devices),
+      devices.data.list.length > 0
+      ? m(devices)
+      : m('div.empty'),
     ]);
   },
 };
