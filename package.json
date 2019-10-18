@@ -3,5 +3,10 @@
   "version": "0.0.0",
   "main": "index.js",
   "author": "Ali Can YILDIZ <anotherglitchinthematrix@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^6.0.12",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.4"
+  }
 }
