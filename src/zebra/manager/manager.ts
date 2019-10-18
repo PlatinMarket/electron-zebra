@@ -45,12 +45,17 @@ export class Manager extends EventEmitter {
     });
   }
 
+  /**
+   * Set the default device.
+   * @param index Device index in the attached devices.
+   */
   public defaultDevice(index: number): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getDevice(index)
-        .then((device) => this._defaultDevice = device)
-        .then(resolve)
-        .catch((reason) => reject(`Can't set the default device.\n${reason}`));
+        .then((device) => this._defaultDevice = device) // Set the default device.
+        .then((device) => this.emit('change', device.device)) // Inform the manager about this change.
+        .then(resolve) // Then resolve.
+        .catch((reason) => reject(`Can't set the default device.\n${reason}`)); // Cacth any error.
     });
   }
 
@@ -111,7 +116,12 @@ export class Manager extends EventEmitter {
       if (index !== undefined) {
         resolve(this.getDevice(index).then((device) => device.endpoint));
       } else {
-        reject();
+        if (this._defaultDevice !== undefined) {
+          resolve(this._defaultDevice.endpoint);
+        } else {
+          // tslint:disable-next-line: max-line-length
+          reject(`There isn't a device index given nor a default device set before to handle the request.\nPlease select a default device to handle upcoming requests or send a device index with the request.`);
+        }
       }
     });
   }

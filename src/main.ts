@@ -44,6 +44,6 @@ app.on('ready', createWindow);
 //   console.log('Başarılı');
 // }).catch(console.log);
 
-manager.defaultDevice(0).then(() => {
-  console.log('success');
-}).catch(console.log);
+// manager.defaultDevice(0).then(() => {
+//   console.log('success');
+// }).catch(console.log);

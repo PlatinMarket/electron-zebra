@@ -34,7 +34,8 @@ electron_1.app.on('ready', createWindow);
 // manager.transfer(Buffer.from('test'), 0).then(() => {
 //   console.log('Başarılı');
 // }).catch(console.log);
-manager.defaultDevice(0).then(function () {
-    console.log('success');
-}).catch(console.log);
+// manager.defaultDevice(0).then(() => {
+//   console.log('success');
+// }).catch(console.log);
+manager.getEndpoint().then().catch(console.log);
 //# sourceMappingURL=main.js.map
