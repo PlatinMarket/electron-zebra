@@ -28,7 +28,10 @@ electron_1.app.on('ready', createWindow);
 // manager.getDevice(50).then((device) => {
 //   console.log(device);
 // }).catch((reason) => console.log(reason));
-manager.getEndpoint().then(function (end) {
-    console.log(end);
+// manager.getEndpoint().then((end) => {
+//   console.log(end);
+// }).catch(console.log);
+manager.transfer(Buffer.from('test'), 0).then(function () {
+    console.log('Başarılı');
 }).catch(console.log);
 //# sourceMappingURL=main.js.map

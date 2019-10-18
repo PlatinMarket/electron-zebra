@@ -83,4 +83,24 @@ export class Manager extends EventEmitter {
     });
   }
 
+  /**
+   * Transfers given data to device.
+   *
+   * Index can be omitted, in that case request will be directed to default device.
+   * @param data Data to be transferred into device.
+   * @param index Device index in the attached devices.
+   */
+  public transfer(data: Buffer, index?: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getEndpoint(index).then((endpoint) => {
+        endpoint.transfer(data, (error) => {
+          if (error !== undefined) {
+            throw error;
+          } else {
+            resolve();
+          }
+        });
+      }).catch(reject);
+    });
+  }
 }

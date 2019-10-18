@@ -36,6 +36,10 @@ app.on('ready', createWindow);
 //   console.log(device);
 // }).catch((reason) => console.log(reason));
 
-manager.getEndpoint().then((end) => {
-  console.log(end);
+// manager.getEndpoint().then((end) => {
+//   console.log(end);
+// }).catch(console.log);
+
+manager.transfer(Buffer.from('test'), 0).then(() => {
+  console.log('Başarılı');
 }).catch(console.log);
