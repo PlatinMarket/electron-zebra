@@ -4,6 +4,10 @@
   "main": "index.js",
   "author": "Ali Can YILDIZ <anotherglitchinthematrix@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev": "yarn build && electron ./build/src/main.js"
+  },
   "devDependencies": {
     "electron": "^6.0.12",
     "tslint": "^5.20.0",
