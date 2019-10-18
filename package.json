@@ -5,8 +5,9 @@
   "author": "Ali Can YILDIZ <anotherglitchinthematrix@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "dev": "yarn build && electron ./app/src/main.js"
+    "dev": "tsc && electron ./app/src/main.js",
+    "dev:rebuild" : "electron-builder install-app-deps",
+    "postinstall": "yarn dev:rebuild"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",

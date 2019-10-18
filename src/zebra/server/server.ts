@@ -1,7 +1,5 @@
-class Server {
+export class Server {
   constructor() {
     // constructor.
   }
 }
-
-export const server = new Server();

@@ -2,6 +2,9 @@
 exports.__esModule = true;
 var electron_1 = require("electron");
 var path = require("path");
+var zebra_1 = require("./zebra");
+var server = new zebra_1.Server();
+var manager = new zebra_1.Manager();
 var mainWindow;
 function createWindow() {
     mainWindow = new electron_1.BrowserWindow({
