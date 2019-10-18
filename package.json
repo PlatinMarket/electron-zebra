@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "yarn build && electron ./build/src/main.js"
+    "dev": "yarn build && electron ./app/src/main.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
