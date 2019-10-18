@@ -22,7 +22,13 @@ function createWindow() {
     });
 }
 electron_1.app.on('ready', createWindow);
-manager.deviceList.then(function (devices) {
-    console.log(devices);
-});
+// manager.deviceList.then((devices) => {
+//   console.log(devices);
+// });
+// manager.getDevice(50).then((device) => {
+//   console.log(device);
+// }).catch((reason) => console.log(reason));
+manager.getEndpoint().then(function (end) {
+    console.log(end);
+}).catch(console.log);
 //# sourceMappingURL=main.js.map

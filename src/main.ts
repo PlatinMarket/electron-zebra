@@ -28,6 +28,14 @@ function createWindow() {
 
 app.on('ready', createWindow);
 
-manager.deviceList.then((devices) => {
-  console.log(devices);
-});
+// manager.deviceList.then((devices) => {
+//   console.log(devices);
+// });
+
+// manager.getDevice(50).then((device) => {
+//   console.log(device);
+// }).catch((reason) => console.log(reason));
+
+manager.getEndpoint().then((end) => {
+  console.log(end);
+}).catch(console.log);
