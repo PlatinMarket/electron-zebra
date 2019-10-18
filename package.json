@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "tsc && electron ./app/src/main.js",
     "dev:rebuild" : "electron-builder install-app-deps",
+    "dist:build": "tsc && electron-builder build --win --publish never",
     "postinstall": "yarn dev:rebuild"
   },
   "devDependencies": {
@@ -26,5 +27,23 @@
     "mithril": "^2.0.4",
     "usb": "^1.6.0",
     "usb-detection": "^4.5.0"
+  },
+  "build": {
+    "appId": "com.electron.electron-zebra",
+    "files": [
+      "./app/**/*"
+    ],
+    "icon": "./app/assets/icon/app.png",
+    "win": {
+      "target":[
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "allowElevation": true,
+      "perMachine": true,
+      "oneClick": false,
+      "createDesktopShortcut": "always"
+    }
   }
 }
