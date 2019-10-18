@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron';
 import * as path from 'path';
 import {IData} from './renderer';
 import { Manager, Server } from './zebra';
@@ -9,11 +9,12 @@ const server = new Server(manager);
 /**
  * A global value to detect if app.quit() fired via tray.
  */
-const quittingViaTray: boolean = false;
+let quittingViaTray: boolean = false;
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Global reference to main window.
 let mainWindow: Electron.BrowserWindow;
+let mainTray: Tray;
 
 function createMainWindow() {
   const window = new BrowserWindow({
@@ -25,6 +26,8 @@ function createMainWindow() {
     minimizable: false,
     resizable: false,
     autoHideMenuBar: true,
+    alwaysOnTop: true,
+    icon: path.join(__dirname, '../assets/icon/window.png'),
     // closable: false,
     // transparent: true,
     // frame: false,
@@ -52,8 +55,33 @@ function createMainWindow() {
   return window;
 }
 
+function createMainTray() {
+  const tray: Tray = new Tray(path.join(__dirname, '../assets/icon/tray.png'));
+
+  const contextMenu: Menu = Menu.buildFromTemplate([
+    {enabled: false, label: `v${app.getVersion()}`},
+    {type: 'separator'},
+    {label: 'Exit', click: () => {
+      quittingViaTray = true;
+      app.quit();
+    }},
+  ]);
+
+  tray.setContextMenu(contextMenu);
+
+  // On dblClick show-or-hide the main window.
+  tray.on('double-click', () => {
+    mainWindow.isVisible()
+      ? mainWindow.hide()
+      : mainWindow.show();
+  });
+
+  return tray;
+}
+
 app.on('ready', () => {
   mainWindow = createMainWindow();
+  mainTray = createMainTray();
 });
 
 // When the renderer is ready execute the updateRenderer.
