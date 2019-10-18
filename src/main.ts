@@ -15,7 +15,6 @@ const server = new Server(manager);
  * A global value to detect if app.quit() fired via tray.
  */
 let quittingViaTray: boolean = false;
-const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Global reference to main window.
 let mainWindow: Electron.BrowserWindow;
@@ -40,10 +39,7 @@ function createMainWindow() {
 
   window.loadFile(path.join(__dirname, '../app.html'));
 
-  // Open devtools automatically on dev mode.
-  if (isDevelopment) {
-    window.webContents.openDevTools({mode: 'detach'});
-  }
+  window.webContents.openDevTools({mode: 'detach'});
 
   window.on('close', (event) => {
     // Prevent the closing app directly, minimize to tray instead.
@@ -108,23 +104,15 @@ function updateRenderer() {
 }
 
 autoUpdater.on('checking-for-update', () => {
-  log.info('');
+  log.info('checking-for-update');
 });
 
 autoUpdater.on('update-available', (info) => {
   log.info('update-available' + info);
 });
 
-autoUpdater.on('update-not-available', (info) => {
-  log.info('update-not-available' + info);
-});
-
 autoUpdater.on('error', (err) => {
-  log.info('error ' + err);
-});
-
-autoUpdater.on('download-progress', () => {
-  log.info('download-progress');
+  log.error(err);
 });
 
 autoUpdater.on('update-downloaded', (info) => {
