@@ -6,28 +6,55 @@ import { Manager, Server } from './zebra';
 const manager = new Manager();
 const server = new Server(manager);
 
+/**
+ * A global value to detect if app.quit() fired via tray.
+ */
+const quittingViaTray: boolean = false;
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
+// Global reference to main window.
 let mainWindow: Electron.BrowserWindow;
 
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
-    webPreferences: {
-      nodeIntegration: true,
-    },
+function createMainWindow() {
+  const window = new BrowserWindow({
+    webPreferences: {nodeIntegration: true},
     title: 'zebra',
+    width: 320,
+    height: 480,
+    fullscreenable: false,
+    minimizable: false,
+    resizable: false,
+    autoHideMenuBar: true,
+    // closable: false,
+    // transparent: true,
+    // frame: false,
   });
 
-  mainWindow.loadFile(path.join(__dirname, '../app.html'));
+  window.loadFile(path.join(__dirname, '../app.html'));
 
-  mainWindow.webContents.openDevTools({mode: 'detach'});
+  // Open devtools automatically on dev mode.
+  if (isDevelopment) {
+    window.webContents.openDevTools({mode: 'detach'});
+  }
 
-  mainWindow.on('closed', () => {
+  window.on('close', (event) => {
+    // Prevent the closing app directly, minimize to tray instead.
+    if (!quittingViaTray) {
+      event.preventDefault();
+      window.hide();
+    }
+  });
+
+  window.on('closed', () => {
     mainWindow = null;
   });
+
+  return window;
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  mainWindow = createMainWindow();
+});
 
 // When the renderer is ready execute the updateRenderer.
 ipcMain.on('renderer.ready', () => updateRenderer());
