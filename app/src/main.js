@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var path = require("path");
 var zebra_1 = require("./zebra");
@@ -11,9 +11,9 @@ function createWindow() {
         width: 1024,
         height: 768,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
         },
-        title: 'zebra'
+        title: 'zebra',
     });
     mainWindow.loadFile(path.join(__dirname, '../app.html'));
     mainWindow.webContents.openDevTools({ mode: 'detach' });
@@ -22,4 +22,7 @@ function createWindow() {
     });
 }
 electron_1.app.on('ready', createWindow);
+manager.deviceList.then(function (devices) {
+    console.log(devices);
+});
 //# sourceMappingURL=main.js.map

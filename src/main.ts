@@ -27,3 +27,7 @@ function createWindow() {
 }
 
 app.on('ready', createWindow);
+
+manager.deviceList.then((devices) => {
+  console.log(devices);
+});

@@ -1,2 +1,2 @@
 export { Server } from './server';
-export { Manager } from './manager';
+export { Manager, Device } from './manager';
