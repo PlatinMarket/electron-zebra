@@ -1,7 +1,12 @@
 import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron';
+import * as log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
-import {IData} from './renderer';
+import { IData } from './renderer';
 import { Manager, Server } from './zebra';
+
+autoUpdater.logger = log;
+log.info('App starting...');
 
 const manager = new Manager();
 const server = new Server(manager);
@@ -80,6 +85,7 @@ function createMainTray() {
 }
 
 app.on('ready', () => {
+  autoUpdater.checkForUpdatesAndNotify();
   mainWindow = createMainWindow();
   mainTray = createMainTray();
 });
@@ -100,3 +106,27 @@ function updateRenderer() {
     mainWindow.webContents.send('device.list', {selected: index, list: devices} as IData);
   });
 }
+
+autoUpdater.on('checking-for-update', () => {
+  log.info('');
+});
+
+autoUpdater.on('update-available', (info) => {
+  log.info('update-available' + info);
+});
+
+autoUpdater.on('update-not-available', (info) => {
+  log.info('update-not-available' + info);
+});
+
+autoUpdater.on('error', (err) => {
+  log.info('error ' + err);
+});
+
+autoUpdater.on('download-progress', () => {
+  log.info('download-progress');
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  log.info('update-downloaded' + info);
+});
