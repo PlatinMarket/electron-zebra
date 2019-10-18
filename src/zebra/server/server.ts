@@ -3,6 +3,14 @@ import * as express from 'express';
 import { Server as httpServer } from 'http';
 import { Manager } from '../manager';
 
+/**
+ * POST request interface.
+ */
+interface IRequest {
+  printer: number;
+  data: string;
+}
+
 export class Server {
 
   private express: express.Express = express();
@@ -63,8 +71,43 @@ export class Server {
 
     // Handle the POST request.
     this.express.post('/', (request, response) => {
-      console.log(request);
-      response.send('Hi!');
+
+      const req = request.body as IRequest;
+
+      // If request only contains printer that means it's a default device set request.
+      if (req.printer !== undefined && !req.data) {
+
+        this.manager.defaultDevice(req.printer)
+          .then(() => {
+            response.send('Default printer succesfully set.');
+          })
+          .catch((error) => {
+            response.status(500).send(error.toString());
+          });
+
+        return;
+      }
+
+      // If request contains data that means it's a transfer request.
+      if (req.data) {
+
+        const printer = req.printer;
+        const data = Buffer.from(req.data);
+
+        this.manager.transfer(data, printer)
+          .then(() => {
+            response.end();
+          })
+          .catch((error) => {
+            response.status(500).send(error.toString());
+          });
+
+        return;
+      }
+
+      // If any condition is not met return Bad Bad Request.
+      response.status(400).end();
+
     });
   }
 
