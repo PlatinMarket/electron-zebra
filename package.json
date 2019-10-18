@@ -5,6 +5,10 @@
   "author": "Ali Can YILDIZ <anotherglitchinthematrix@gmail.com>",
   "license": "MIT",
   "main": "./app/src/main.js",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
   "scripts": {
     "dev": "tsc && electron ./app/src/main.js",
     "dev:rebuild" : "electron-builder install-app-deps",
@@ -49,6 +53,9 @@
       "perMachine": true,
       "oneClick": false,
       "createDesktopShortcut": "always"
+    },
+    "publish": {
+      "provider": "github"
     }
   }
 }
