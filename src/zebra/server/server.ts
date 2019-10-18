@@ -1,12 +1,21 @@
+import * as cors from 'cors';
 import * as express from 'express';
 import { Server as httpServer } from 'http';
+import { Manager } from '../manager';
 
 export class Server {
 
   private express: express.Express = express();
   private server: httpServer;
+  private manager: Manager;
 
-  constructor(port: number = 9669) {
+  constructor(manager: Manager, port: number = 9669) {
+
+    this.manager = manager;
+
+    // Enable CORS
+    this.express.use(cors());
+
     // Use JSON body parser.
     this.express.use(express.json());
 
@@ -40,9 +49,16 @@ export class Server {
   private register(): void {
 
     // Handle the GET request.
-    this.express.get('/', (request, response) => {
-      console.log(request);
-      response.send('Hi!');
+    this.express.get('/', (_, response) => {
+      this.manager.deviceList
+        .then((devices) => {
+          const index = this.manager.findDefaultDeviceIndex(devices);
+          response.json({
+              selected: index,
+              devices,
+          });
+        })
+        .catch((error) => response.status(500).send(error.toString()));
     });
 
     // Handle the POST request.

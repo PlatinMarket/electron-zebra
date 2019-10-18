@@ -2,8 +2,8 @@ import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { Manager, Server } from './zebra';
 
-const server = new Server();
 const manager = new Manager();
+const server = new Server(manager);
 
 let mainWindow: Electron.BrowserWindow;
 
