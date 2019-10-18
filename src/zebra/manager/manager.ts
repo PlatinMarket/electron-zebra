@@ -18,7 +18,7 @@ const supportedVendors = [
 
 export class Manager extends EventEmitter {
 
-  private _defaultDevice: IDevice;
+  private _default: IDevice;
 
   constructor() {
     super();
@@ -28,6 +28,13 @@ export class Manager extends EventEmitter {
 
     // Mirror any changes on usbDetection to Manager.
     usbDetection.on('change', (device) => this.emit('change', device));
+
+    // On device remove, check if the removed device is default device. If so set it undefined.
+    usbDetection.on('remove', (device) => {
+      if (this._default && this._default.device.deviceAddress === device.deviceAddress) {
+        this._default = undefined;
+      }
+    });
   }
 
   /**
@@ -52,11 +59,21 @@ export class Manager extends EventEmitter {
   public defaultDevice(index: number): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getDevice(index)
-        .then((device) => this._defaultDevice = device) // Set the default device.
+        .then((device) => this._default = device) // Set the default device.
         .then((device) => this.emit('change', device.device)) // Inform the manager about this change.
         .then(resolve) // Then resolve.
         .catch((reason) => reject(`Can't set the default device.\n${reason}`)); // Cacth any error.
     });
+  }
+
+  /**
+   * Returns the default device's index in the given device list.
+   * @param devices Currently attached device array.
+   */
+  public findDefaultDeviceIndex(devices: Device[]): number {
+    return devices.findIndex((device) =>
+      this._default
+      && this._default.device.deviceAddress === device.deviceAddress);
   }
 
   /**
@@ -116,8 +133,8 @@ export class Manager extends EventEmitter {
       if (index !== undefined) {
         resolve(this.getDevice(index).then((device) => device.endpoint));
       } else {
-        if (this._defaultDevice !== undefined) {
-          resolve(this._defaultDevice.endpoint);
+        if (this._default !== undefined) {
+          resolve(this._default.endpoint);
         } else {
           // tslint:disable-next-line: max-line-length
           reject(`There isn't a device index given nor a default device set before to handle the request.\nPlease select a default device to handle upcoming requests or send a device index with the request.`);
