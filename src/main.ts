@@ -40,6 +40,10 @@ app.on('ready', createWindow);
 //   console.log(end);
 // }).catch(console.log);
 
-manager.transfer(Buffer.from('test'), 0).then(() => {
-  console.log('Başarılı');
+// manager.transfer(Buffer.from('test'), 0).then(() => {
+//   console.log('Başarılı');
+// }).catch(console.log);
+
+manager.defaultDevice(0).then(() => {
+  console.log('success');
 }).catch(console.log);
