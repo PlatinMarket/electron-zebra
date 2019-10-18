@@ -1,7 +1,7 @@
 {
   "name": "electron-zebra",
+  "description": "Nil",
   "version": "0.0.0",
-  "main": "index.js",
   "author": "Ali Can YILDIZ <anotherglitchinthematrix@gmail.com>",
   "license": "MIT",
   "scripts": {
