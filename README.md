@@ -204,3 +204,23 @@ $ curl -i -d '{"printer": 0, "data": "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^
 > Connection: keep-alive
 > Content-Length: 0
 ```
+
+cURL Concurrent print request example
+
+```sh
+$ curl -i -d '{"printer":0, "data": "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 1 ^FS^XZ"}' -H "Content-Type: application/json" -X POST http://localhost:9669 & curl -i -d '{"data": "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 2 ^FS^XZ"}' -H "Content-Type: application/json" -X POST http://localhost:9669
+
+> HTTP/1.1 200 OK
+> X-Powered-By: Express
+> Access-Control-Allow-Origin: *
+> Date: Sat, 19 Oct 2019 11:20:31 GMT
+> Connection: keep-alive
+> Content-Length: 0
+
+> HTTP/1.1 200 OK
+> X-Powered-By: Express
+> Access-Control-Allow-Origin: *
+> Date: Sat, 19 Oct 2019 11:20:31 GMT
+> Connection: keep-alive
+> Content-Length: 0
+```
