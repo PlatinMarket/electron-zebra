@@ -15,6 +15,7 @@ const server = new Server(manager);
  * A global value to detect if app.quit() fired via tray.
  */
 let quittingViaTray: boolean = false;
+const showConsole: boolean = false;
 
 // Global reference to main window.
 let mainWindow: Electron.BrowserWindow;
@@ -39,7 +40,9 @@ function createMainWindow() {
 
   window.loadFile(path.join(__dirname, '../app.html'));
 
-  window.webContents.openDevTools({mode: 'detach'});
+  if (showConsole) {
+    window.webContents.openDevTools({mode: 'detach'});
+  }
 
   window.on('close', (event) => {
     // Prevent the closing app directly, minimize to tray instead.
@@ -56,17 +59,39 @@ function createMainWindow() {
   return window;
 }
 
-function createMainTray() {
+/**
+ * Builds the main tray.
+ * @param updateAvailable Decide to show Update and Restart.
+ */
+function buildMainTray(updateAvailable: boolean = false) {
+
+  // destroy old tray.
+  if (mainTray !== undefined) {
+    mainTray.destroy();
+  }
+
+  // Consider showing another icon for app states. This will require to destroy the mainTray in every state.
   const tray: Tray = new Tray(path.join(__dirname, '../assets/icon/tray.png'));
 
-  const contextMenu: Menu = Menu.buildFromTemplate([
+  const contextMenuItems: Electron.MenuItemConstructorOptions[] = [
     {enabled: false, label: `v${app.getVersion()}`},
     {type: 'separator'},
     {label: 'Exit', click: () => {
       quittingViaTray = true;
       app.quit();
     }},
-  ]);
+  ];
+
+  if (updateAvailable) {
+    const menuItem: Electron.MenuItemConstructorOptions = {label: 'Update and Restart', click: () => {
+      // Not silent, restart after update.
+      autoUpdater.quitAndInstall(false, true);
+    }};
+    const seperator: Electron.MenuItemConstructorOptions = {type: 'separator'};
+    contextMenuItems.push(seperator, menuItem);
+  }
+
+  const contextMenu: Menu =  Menu.buildFromTemplate(contextMenuItems);
 
   tray.setContextMenu(contextMenu);
 
@@ -77,13 +102,14 @@ function createMainTray() {
       : mainWindow.show();
   });
 
-  return tray;
+  mainTray = tray;
 }
 
 app.on('ready', () => {
   autoUpdater.checkForUpdatesAndNotify();
   mainWindow = createMainWindow();
-  mainTray = createMainTray();
+  buildMainTray();
+  // setTimeout(() => buildMainTray(true), 5000);
 });
 
 // When the renderer is ready execute the updateRenderer.
@@ -117,4 +143,9 @@ autoUpdater.on('error', (err) => {
 
 autoUpdater.on('update-downloaded', (info) => {
   log.info('update-downloaded' + info);
+
+  // Rebuild the main tray with an option to update and restart.
+  buildMainTray(true);
+
+  log.info('Update will be performed when the app restarted.');
 });

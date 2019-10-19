@@ -12,8 +12,8 @@ interface IDevice {
 
 const supportedVendors = [
   0xA5F,  // Zebra
-  0xBDA,  // Test: Realtek
-  0x4F2,  // Test: Standart USB Host Controller
+  // 0xBDA,  // Test: Realtek
+  // 0x4F2,  // Test: Standart USB Host Controller
 ];
 
 export class Manager extends EventEmitter {
