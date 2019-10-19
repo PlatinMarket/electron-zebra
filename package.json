@@ -1,7 +1,7 @@
 {
   "name": "electron-zebra",
   "description": "Nil",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "Ali Can YILDIZ <anotherglitchinthematrix@gmail.com>",
   "license": "MIT",
   "main": "./app/src/main.js",
@@ -56,8 +56,7 @@
       "createDesktopShortcut": "always"
     },
     "publish": {
-      "provider": "github",
-      "token": "<GITHUB_ACCESS_TOKEN_WITH_REPO_PERMISSION> USE GH_TOKEN ENV ISTEAD."
+      "provider": "github"
     }
   }
 }
