@@ -1,6 +1,6 @@
 # electron-zebra
 
-electron-zebra is a small utility program to handle print requests via rest api.
+electron-zebra is a small utility program that can handle print requests via a rest api.
 
 ## Table of Contents
 
@@ -119,7 +119,7 @@ $ curl -i -H "Accept: application/json" "ip:port"
 
 ```
 
-Set default device
+Set a default device to handle print requests that sent without a target.
 
 ```
 REQUEST
@@ -150,7 +150,7 @@ $ curl -i -d '{"printer": <index>}' -H "Content-Type: application/json" -X POST 
 > "Default printer succesfully set."
 ```
 
-Send print request to default device
+Send print request to default device.
 
 ```
 REQUEST
@@ -177,7 +177,7 @@ $ curl -i -d '{"data": "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ"}' -H "Cont
 > Content-Length: 0
 ```
 
-Send print request to targeted device
+Send print request to targeted device.
 
 ```
 REQUEST
