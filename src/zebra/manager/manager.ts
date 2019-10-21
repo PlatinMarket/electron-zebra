@@ -1,3 +1,4 @@
+import * as storage from 'electron-json-storage';
 import { EventEmitter } from 'events';
 import * as usb from 'usb';
 import * as usbDetection from 'usb-detection';
@@ -35,6 +36,12 @@ export class Manager extends EventEmitter {
         this._default = undefined;
       }
     });
+
+    // if default-printer exist try to select it.
+    storage.get('default-printer', (err, data: {id: number}) => {
+      this.defaultDevice(data.id).catch(() => {return; }); // ignore error.
+    });
+
   }
 
   /**
@@ -61,6 +68,13 @@ export class Manager extends EventEmitter {
       this.getDevice(index)
         .then((device) => this._default = device) // Set the default device.
         .then((device) => this.emit('change', device.device)) // Inform the manager about this change.
+        .then(() => {
+          storage.set('default-printer', {id: index}, (err) => {
+            if (err !== undefined) {
+              throw new Error(err);
+            }
+          });
+        })
         .then(resolve) // Then resolve.
         .catch((reason) => reject(`Can't set the default device.\n${reason}`)); // Cacth any error.
     });

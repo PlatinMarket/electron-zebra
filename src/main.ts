@@ -109,14 +109,12 @@ app.on('ready', () => {
   autoUpdater.checkForUpdatesAndNotify();
   mainWindow = createMainWindow();
   buildMainTray();
-  // setTimeout(() => buildMainTray(true), 5000);
 });
 
 // When the renderer is ready execute the updateRenderer.
 ipcMain.on('renderer.ready', () => updateRenderer());
 ipcMain.on('device.set', (event: Electron.IpcMainEvent, index: number) => {
-  manager.defaultDevice(index)
-    .catch(console.log);
+  manager.defaultDevice(index).catch(console.log);
 });
 
 // Inform the renderer on any change on the manager.
