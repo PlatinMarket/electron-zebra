@@ -50,6 +50,17 @@ ul.devices > li.device.selected::before{
   margin-right:8px;
 }
 
+div.info{
+  font-size:14px;
+  text-align:center;
+  padding:8px 12px;
+  color:#7E6514;
+  background-color:#FEF8E7;
+  /* border:1px solid #7E6514; */
+  border-radius:4px;
+  margin: 4px 8px;
+}
+
 div.notifications {
   /* background:rgba(255,0,0,0.4); */
   position: absolute;
@@ -72,7 +83,7 @@ div.notifications > div.notification:hover{
 }
 
 div.notification::before{
-  content: 'SYS';
+  content: '👻';
   font-weight: bold;
   margin-right:8px;
 }

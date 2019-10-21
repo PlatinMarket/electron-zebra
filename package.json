@@ -1,7 +1,7 @@
 {
   "name": "electron-zebra",
-  "description": "Nil",
-  "version": "1.0.1",
+  "description": "A small utility program for Zebra products to handle print requests via a rest api.",
+  "version": "1.0.0",
   "author": "Ali Can YILDIZ <anotherglitchinthematrix@gmail.com>",
   "license": "MIT",
   "main": "./app/src/main.js",

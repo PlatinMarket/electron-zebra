@@ -2,4 +2,3 @@ node_modules
 distribution
 app/src
 package-lock.json
-.env

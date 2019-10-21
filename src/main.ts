@@ -3,7 +3,7 @@ import * as log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
 import { IData, INotification } from './renderer';
-import { Manager, Server } from './zebra';
+import { Device, Manager, Server } from './zebra';
 
 autoUpdater.logger = log;
 log.info('App starting...');
@@ -15,7 +15,7 @@ const server = new Server(manager);
  * A global value to detect if app.quit() fired via tray.
  */
 let quittingViaTray: boolean = false;
-const showConsole: boolean = true;
+const showConsole: boolean = false;
 
 // Global reference to main window.
 let mainWindow: Electron.BrowserWindow;
@@ -32,7 +32,7 @@ function createMainWindow() {
     resizable: false,
     autoHideMenuBar: true,
     alwaysOnTop: true,
-    icon: path.join(__dirname, '../assets/icon/window.png'),
+    icon: path.join(__dirname, '../assets/icon/app16x16.png'),
     // closable: false,
     // transparent: true,
     // frame: false,
@@ -71,10 +71,13 @@ function buildMainTray(updateAvailable: boolean = false) {
   }
 
   // Consider showing another icon for app states. This will require to destroy the mainTray in every state.
-  const tray: Tray = new Tray(path.join(__dirname, '../assets/icon/tray.png'));
+  const tray: Tray = new Tray(path.join(__dirname, '../assets/icon/app16x16.png'));
 
   const contextMenuItems: Electron.MenuItemConstructorOptions[] = [
     {enabled: false, label: `v${app.getVersion()}`},
+    {label: 'Check for Updates', click: () => {
+      autoUpdater.checkForUpdatesAndNotify();
+    }},
     {type: 'separator'},
     {label: 'Exit', click: () => {
       quittingViaTray = true;
@@ -113,9 +116,10 @@ app.on('ready', () => {
 
 // When the renderer is ready execute the updateRenderer.
 ipcMain.on('renderer.ready', () => updateRenderer());
+
 ipcMain.on('device.set', (event: Electron.IpcMainEvent, index: number) => {
   manager.defaultDevice(index).then(() => {
-    sendNotification({class: 'green', content: `Default device successfully set.`, duration: 3000});
+    // sendNotification({class: 'green', content: `Default device successfully set.`, duration: 3000});
   }).catch((err) => {
     sendNotification({class: 'red', content: `${err}`, duration: 5000});
   });
@@ -123,6 +127,20 @@ ipcMain.on('device.set', (event: Electron.IpcMainEvent, index: number) => {
 
 // Inform the renderer on any change on the manager.
 manager.on('change', () => updateRenderer());
+
+manager.on('change:remove', (device: Device) => {
+  sendNotification({class: 'yellow', content: `${device.deviceName} removed from the system.`, duration: 1500});
+});
+
+manager.on('change:add', (device: Device) => {
+  sendNotification({class: 'blue', content: `${device.deviceName} attached to the system.`, duration: 1500});
+});
+
+manager.on('change:default', (device: Device) => {
+  updateRenderer();
+  // tslint:disable-next-line: max-line-length
+  sendNotification({class: 'green', content: `${device.deviceName} selected as default request handler.`, duration: 1500});
+});
 
 function updateRenderer() {
   manager.deviceList.then((devices) => {
@@ -136,6 +154,8 @@ autoUpdater.on('checking-for-update', () => {
 });
 
 autoUpdater.on('update-available', (info) => {
+  // tslint:disable-next-line: max-line-length
+  sendNotification({class: '', content: `A new update is available and will be downloaded in the background. You will be notified when it's ready to install.`, duration: 0});
   log.info('update-available' + info);
 });
 
@@ -145,7 +165,7 @@ autoUpdater.on('error', (err) => {
 
 autoUpdater.on('update-downloaded', (info) => {
   // tslint:disable-next-line: max-line-length
-  sendNotification({class: 'green', content: `A new update is available to perform. Update will be performed when the app restarted.`, duration: 1000});
+  sendNotification({class: '', content: `A new update is available to perform. Update will be performed when the app is restarted.`, duration: 0});
   log.info('update-downloaded' + info);
 
   // Rebuild the main tray with an option to update and restart.

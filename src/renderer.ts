@@ -25,6 +25,7 @@ ipcRenderer.on('device.list', (event: Electron.IpcRendererEvent, data: IData) =>
 
 ipcRenderer.on('notification', (even: Electron.IpcRendererEvent, data: INotification) => {
   notifications.list.push(data);
+  m.redraw();
 });
 
 const devices = {
@@ -53,7 +54,7 @@ export interface INotification {
 
 const notifications = {
   list: [
-    // {class: '', content: 'empty', duration: 1000},
+    // {class: '', content: 'empty', duration: 0},
     // {class: 'yellow', content: 'yellow', duration: 2000},
     // {class: 'green', content: 'green', duration: 3000},
     // {class: 'blue', content: 'blue', duration: 4000},
@@ -93,7 +94,9 @@ const body = {
     return m('div.body', [
       m(notifications),
       devices.data.list.length > 0
-      ? m(devices)
+      ? [
+        m('div.info', 'Select a default device to handle requests.'),
+        m(devices)]
       : m('div.empty'),
     ]);
   },

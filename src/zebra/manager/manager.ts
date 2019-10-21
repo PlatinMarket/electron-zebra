@@ -30,11 +30,14 @@ export class Manager extends EventEmitter {
     // Mirror any changes on usbDetection to Manager.
     usbDetection.on('change', (device) => this.emit('change', device));
 
+    usbDetection.on('add', (device) => this.emit('change:add', device));
+
     // On device remove, check if the removed device is default device. If so set it undefined.
     usbDetection.on('remove', (device) => {
       if (this._default && this._default.device.deviceAddress === device.deviceAddress) {
         this._default = undefined;
       }
+      this.emit('change:remove', device);
     });
 
     // if default-printer exist try to select it.
@@ -67,7 +70,7 @@ export class Manager extends EventEmitter {
     return new Promise((resolve, reject) => {
       this.getDevice(index)
         .then((device) => this._default = device) // Set the default device.
-        .then((device) => this.emit('change', device.device)) // Inform the manager about this change.
+        .then((device) => this.emit('change:default', device.device)) // Inform the manager about this change.
         .then(() => {
           storage.set('default-printer', {id: index}, (err) => {
             if (err !== undefined) {

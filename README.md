@@ -2,11 +2,14 @@
 
 electron-zebra is a small utility program that can handle print requests via a rest api.
 
+It serves the API Endpoint at the port __65533__
+
 ## Table of Contents
 
 - [Build](#Build)
   - [Scripts](#Scripts)
 - [Configuration](#Configuration)
+  - [Publishing](#Publishing)
 - [Usage](#usage)
 
 ## Build
@@ -30,47 +33,67 @@ $ npm install
 ## Scripts
 
 Build and execute the electron app in development.
-```
+```sh
 $ yarn dev
 ```
 Use to rebuild modules for electron. This command is automatically called in `postinstall`.
-```
+```sh
 $ yarn dev:rebuild
 ```
 Build the installer without publishing to github.
-```
+```sh
 $ dist:build
 ```
 Build the installer and publish to github. For this option you need to configurate the `package.json`
-```
+```sh
 $ dist:publish
 ```
 
 ## Configuration
 Configurate `package.json` for auto update releases.
 
-```
+```js
 {
   "name": "<APP_NAME>",
   ...
   "repository": {
     "type": "git",
-    "url": "<github_repo>"
+    "url": "<REPO_URL>"
   },
+  ...
   "build": {
     "appId": "com.electron.<APP_NAME>",
     "productName": "<APP_DISPLAY_NAME_>",
     ...
     "publish": {
       "provider": "github",
-      "token": "<GITHUB_ACCESS_TOKEN_WITH_REPO_PERMISSION>"
     }
   }
 }
 
 ```
 
-You should consider using `GH_TOKEN` env variable to store github token, otherwise github will revoke the token when it encounters with it in the source code.
+## Publishing
+
+
+Create a Public GitHub repo for your poject. And change the `repository.url` in the `package.json` with your repo URL.
+
+Create new personal access token with the repo scope [__from here__](https://github.com/settings/tokens/new).
+
+Set `GH_TOKEN` environment variable with the token you've generated.
+
+You're ready to publish.
+
+```sh
+$ yarn dist:publish
+```
+
+Alternatively you can also define it just for the current shell session like the example below.
+
+```sh
+$ export GH_TOKEN='########################################'
+$ yarn dist:publish
+```
 
 ## Usage
 
@@ -210,7 +233,7 @@ $ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0
 cURL Example: concurrent print request example to default device and a targeted device.
 
 ```sh
-$ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 1 ^FS^XZ" -X POST http://localhost:9669 & curl -i -H "Content-Type: x-application/zpl" --data "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 2 ^FS^XZ" -X POST http://localhost:9669
+$ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 1 ^FS^XZ" -X POST http://localhost:65533 & curl -i -H "Content-Type: x-application/zpl" --data "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 2 ^FS^XZ" -X POST http://localhost:65533
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
