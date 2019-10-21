@@ -49,3 +49,64 @@ ul.devices > li.device.selected::before{
   line-height: 0;
   margin-right:8px;
 }
+
+div.notifications {
+  /* background:rgba(255,0,0,0.4); */
+  position: absolute;
+  width: 100%;
+  bottom:0;
+}
+
+div.notifications > div.notification {
+  opacity:0.6;
+  font-size:12px;
+  padding:6px 12px;
+  background-color:#F9F9FB;
+  color:#234361;
+  border-top:1px solid currentColor;
+  cursor: pointer;
+}
+
+div.notifications > div.notification:hover{
+  opacity:1;
+}
+
+div.notification::before{
+  content: 'SYS';
+  font-weight: bold;
+  margin-right:8px;
+}
+
+div.notifications > div.notification.yellow {
+  color:#7E6514;
+  background-color:#FEF8E7;
+}
+
+div.notification.yellow::before{
+  content:'WARNING'
+}
+
+div.notifications > div.notification.green {
+  color:#00783E;
+  background-color:#F1FAF5;
+}
+
+div.notification.green::before{
+  content:'SUCCESS'
+}
+
+div.notifications > div.notification.blue {
+  color:#084B8A;
+  background-color:#F7F9FD;
+}
+div.notification.blue::before{
+  content:'INFO'
+}
+
+div.notifications > div.notification.red {
+  color:#BF0E08;
+  background-color:#FAE2E2;
+}
+div.notification.red::before{
+  content:'ERROR'
+}

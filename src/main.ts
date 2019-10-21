@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron';
 import * as log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
-import { IData } from './renderer';
+import { IData, INotification } from './renderer';
 import { Manager, Server } from './zebra';
 
 autoUpdater.logger = log;
@@ -15,7 +15,7 @@ const server = new Server(manager);
  * A global value to detect if app.quit() fired via tray.
  */
 let quittingViaTray: boolean = false;
-const showConsole: boolean = false;
+const showConsole: boolean = true;
 
 // Global reference to main window.
 let mainWindow: Electron.BrowserWindow;
@@ -114,7 +114,11 @@ app.on('ready', () => {
 // When the renderer is ready execute the updateRenderer.
 ipcMain.on('renderer.ready', () => updateRenderer());
 ipcMain.on('device.set', (event: Electron.IpcMainEvent, index: number) => {
-  manager.defaultDevice(index).catch(console.log);
+  manager.defaultDevice(index).then(() => {
+    sendNotification({class: 'green', content: `Default device successfully set.`, duration: 3000});
+  }).catch((err) => {
+    sendNotification({class: 'red', content: `${err}`, duration: 5000});
+  });
 });
 
 // Inform the renderer on any change on the manager.
@@ -140,10 +144,20 @@ autoUpdater.on('error', (err) => {
 });
 
 autoUpdater.on('update-downloaded', (info) => {
+  // tslint:disable-next-line: max-line-length
+  sendNotification({class: 'green', content: `A new update is available to perform. Update will be performed when the app restarted.`, duration: 1000});
   log.info('update-downloaded' + info);
 
   // Rebuild the main tray with an option to update and restart.
   buildMainTray(true);
 
-  log.info('Update will be performed when the app restarted.');
+  // log.info('Update will be performed when the app restarted.');
 });
+
+function sendNotification(notification: INotification) {
+  if (mainWindow) {
+    mainWindow.webContents.send('notification', notification);
+  } else {
+    console.log(notification);
+  }
+}
