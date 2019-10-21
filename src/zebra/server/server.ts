@@ -24,8 +24,12 @@ export class Server {
     // Enable CORS
     this.express.use(cors());
 
-    // Use JSON body parser.
-    this.express.use(express.json());
+    // Use Raw Parser
+    this.express.use(express.raw({
+      inflate: true,
+      limit: '100kb',
+      type: 'x-application/zpl'
+    }));
 
     // Register handlers.
     this.register();
@@ -72,29 +76,16 @@ export class Server {
     // Handle the POST request.
     this.express.post('/', (request, response) => {
 
-      const req = request.body as IRequest;
+      const contype = request.headers['content-type'];
+      if (contype !== 'x-application/zpl') return response.status(400).send('Bad request');
 
-      // If request only contains printer that means it's a default device set request.
-      if (req.printer !== undefined && !req.data) {
 
-        this.manager.defaultDevice(req.printer)
-          .then(() => {
-            response.send('Default printer succesfully set.');
-          })
-          .catch((error) => {
-            response.status(500).send(error.toString());
-          });
+      if (request.body.length > 0) {
 
-        return;
-      }
-
-      // If request contains data that means it's a transfer request.
-      if (req.data) {
-
-        const printer = req.printer;
-        const data = Buffer.from(req.data);
-
-        this.manager.transfer(data, printer)
+        let printer = request.headers['x-printer'] ?  parseInt(request.headers['x-printer'].toString(), 10) : undefined;
+        if (isNaN(printer)) printer = undefined;
+        
+        this.manager.transfer(request.body, printer)
           .then(() => {
             response.end();
           })

@@ -108,9 +108,17 @@ export class Manager extends EventEmitter {
         .then((device) => {
           // Access the device via node-usb.
           const _device = usb.findByIds(device.vendorId, device.productId);
+          if (!_device) {
+            return reject(new Error('Cihaza bulunamadı'));
+          }
           _device.open();
 
           const _interface = _device.interface(0);
+
+          if (!_interface) {
+            _device.close();
+            return reject(new Error('Cihaza ulaşılamıyor. Başka açık programları kapatıp tekrar deneyin'));
+          }
           _interface.claim();
 
           const _endpoint = _interface.endpoints[1] as usb.OutEndpoint;
