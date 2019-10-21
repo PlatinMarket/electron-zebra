@@ -3,12 +3,10 @@ import * as express from 'express';
 import { Server as httpServer } from 'http';
 import { Manager } from '../manager';
 
-/**
- * POST request interface.
- */
-interface IRequest {
-  printer: number;
-  data: string;
+enum Header {
+  ContentType = 'x-application/zpl',
+  DefaultPrinter = 'x-default-printer',
+  Printer = 'x-printer',
 }
 
 export class Server {
@@ -28,7 +26,7 @@ export class Server {
     this.express.use(express.raw({
       inflate: true,
       limit: '100kb',
-      type: 'x-application/zpl',
+      type: Header.ContentType,
     }));
 
     // Register handlers.
@@ -75,10 +73,10 @@ export class Server {
 
     // Handle the POST request.
     this.express.post('/', (request, response) => {
-      const defaultPrinter = this.parseNumber(request.headers['x-default-printer']);
+      const defaultPrinter = this.parseNumber(request.headers[Header.DefaultPrinter]);
 
       const contentType = request.headers['content-type'];
-      if (contentType !== 'x-application/zpl') {
+      if (contentType !== Header.ContentType) {
         return response.status(400).send('Bad request');
       }
 
@@ -94,7 +92,7 @@ export class Server {
 
       // if request body's length is greater than zero, try to print.
       if (request.body.length > 0) {
-        const requestPrinter = this.parseNumber(request.headers['x-printer']);
+        const requestPrinter = this.parseNumber(request.headers[Header.Printer]);
 
         this.manager.transfer(request.body, requestPrinter)
           .then(() => {
