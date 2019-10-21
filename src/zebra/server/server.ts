@@ -15,7 +15,7 @@ export class Server {
   private server: httpServer;
   private manager: Manager;
 
-  constructor(manager: Manager, port: number = 9669) {
+  constructor(manager: Manager, port: number = 65533) {
 
     this.manager = manager;
 

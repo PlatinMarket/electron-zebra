@@ -79,7 +79,7 @@ Get default device index and all the supported devices attached to the server sy
 ```
 REQUEST
 METHOD: GET
-URL: <ip>:<port>
+URL: <ip>:65533
 
 RESPONSE
 BODY: {
@@ -91,7 +91,7 @@ BODY: {
  cURL Example
 
 ```sh
-$ curl -i -H "Accept: application/json" "ip:port"
+$ curl -i -H "Accept: application/json" <ip>:65533
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
@@ -124,7 +124,7 @@ Set a default device to handle print requests that sent without a target.
 ```
 REQUEST
 METHOD: POST
-URL: <ip>:<port>
+URL: <ip>:65533
 HEADERS:
   Content-type: "x-application/zpl"
   x-default-printer: <index>
@@ -136,7 +136,7 @@ RESPONSE
  cURL Example
 
  ```sh
-curl -i -H "Content-Type: x-application/zpl" -H "x-default-printer: 0" -X POST <ip>:<port>
+curl -i -H "Content-Type: x-application/zpl" -H "x-default-printer: 0" -X POST <ip>:65533
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
@@ -155,7 +155,7 @@ Send print request to default device.
 ```
 REQUEST
 METHOD: POST
-URL: <ip>:<port>
+URL: <ip>:65533
 HEADERS:
   Content-type: "x-application/zpl"
 BODY:
@@ -168,7 +168,7 @@ RESPONSE
 cURL Example
 
  ```sh
-$ curl -i -H "Content-Type: x-application/zpl" --data "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ" -X POST <ip>:<port>
+$ curl -i -H "Content-Type: x-application/zpl" --data "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ" -X POST <ip>:65533
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
@@ -183,7 +183,7 @@ Send print request to targeted device.
 ```
 REQUEST
 METHOD: POST
-URL: <ip>:<port>
+URL: <ip>:65533
 HEADERS:
   Content-type: "x-application/zpl"
   x-printer: <index>
@@ -197,7 +197,7 @@ RESPONSE
 cURL Example
 
  ```sh
-$ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ" -X POST <ip>:<port>
+$ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ" -X POST <ip>:65533
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
