@@ -28,7 +28,7 @@ export class Server {
     this.express.use(express.raw({
       inflate: true,
       limit: '100kb',
-      type: 'x-application/zpl'
+      type: 'x-application/zpl',
     }));
 
     // Register handlers.
@@ -75,17 +75,28 @@ export class Server {
 
     // Handle the POST request.
     this.express.post('/', (request, response) => {
+      const defaultPrinter = this.parseNumber(request.headers['x-default-printer']);
 
-      const contype = request.headers['content-type'];
-      if (contype !== 'x-application/zpl') return response.status(400).send('Bad request');
+      const contentType = request.headers['content-type'];
+      if (contentType !== 'x-application/zpl') {
+        return response.status(400).send('Bad request');
+      }
 
+      // if defaultPrinter is defined set the defualt printer.
+      if (defaultPrinter !== undefined) {
+        this.manager.defaultDevice(defaultPrinter).then(() => {
+          response.status(200).send('Default printer succesfully set.');
+        }).catch((error) => {
+          response.status(500).send(`${error}`);
+        });
+        return;
+      }
 
+      // if request body's length is greater than zero, try to print.
       if (request.body.length > 0) {
+        const requestPrinter = this.parseNumber(request.headers['x-printer']);
 
-        let printer = request.headers['x-printer'] ?  parseInt(request.headers['x-printer'].toString(), 10) : undefined;
-        if (isNaN(printer)) printer = undefined;
-        
-        this.manager.transfer(request.body, printer)
+        this.manager.transfer(request.body, requestPrinter)
           .then(() => {
             response.end();
           })
@@ -94,12 +105,17 @@ export class Server {
           });
 
         return;
+      } else {
+        response.status(400).send('Body can not be blank.');
+        return;
       }
 
-      // If any condition is not met return Bad Bad Request.
-      response.status(400).end();
-
     });
+  }
+
+  private parseNumber(value: any): number  {
+    value = parseInt(value, 10);
+    return isNaN(value) ? undefined : value;
   }
 
 }
