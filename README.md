@@ -125,9 +125,9 @@ Set a default device to handle print requests that sent without a target.
 REQUEST
 METHOD: POST
 URL: <ip>:<port>
-BODY: {
-  printer: <index>  // Index of the device in the device list.
-}
+HEADERS:
+  Content-type: "x-application/zpl"
+  x-default-printer: <index>
 
 RESPONSE
 200 OK | 500 Internal Error | 400 Bad Request
@@ -136,7 +136,7 @@ RESPONSE
  cURL Example
 
  ```sh
-$ curl -i -d '{"printer": <index>}' -H "Content-Type: application/json" -X POST <ip>:<port>
+curl -i -H "Content-Type: x-application/zpl" -H "x-default-printer: 0" -X POST <ip>:<port>
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
@@ -156,9 +156,10 @@ Send print request to default device.
 REQUEST
 METHOD: POST
 URL: <ip>:<port>
-BODY: {
-  data: <string>  // ZPL code.
-}
+HEADERS:
+  Content-type: "x-application/zpl"
+BODY:
+  <zpl code>
 
 RESPONSE
 200 OK | 500 Internal Error | 400 Bad Request
@@ -167,7 +168,7 @@ RESPONSE
 cURL Example
 
  ```sh
-$ curl -i -d '{"data": "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ"}' -H "Content-Type: application/json" -X POST <ip>:<port>
+$ curl -i -H "Content-Type: x-application/zpl" --data "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ" -X POST <ip>:<port>
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
@@ -183,10 +184,11 @@ Send print request to targeted device.
 REQUEST
 METHOD: POST
 URL: <ip>:<port>
-BODY: {
-  printer: <index>
-  data: <string>  // ZPL code.
-}
+HEADERS:
+  Content-type: "x-application/zpl"
+  x-printer: <index>
+BODY:
+  <zpl code>
 
 RESPONSE
 200 OK | 500 Internal Error | 400 Bad Request
@@ -195,7 +197,7 @@ RESPONSE
 cURL Example
 
  ```sh
-$ curl -i -d '{"printer": 0, "data": "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ"}' -H "Content-Type: application/json" -X POST <ip>:<port>
+$ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^XZ" -X POST <ip>:<port>
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
@@ -205,10 +207,10 @@ $ curl -i -d '{"printer": 0, "data": "^XA^CF0,30^FO220,115^FD PRINT REQUEST ^FS^
 > Content-Length: 0
 ```
 
-cURL Concurrent print request example
+cURL Example: concurrent print request example to default device and a targeted device.
 
 ```sh
-$ curl -i -d '{"printer":0, "data": "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 1 ^FS^XZ"}' -H "Content-Type: application/json" -X POST http://localhost:9669 & curl -i -d '{"data": "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 2 ^FS^XZ"}' -H "Content-Type: application/json" -X POST http://localhost:9669
+$ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 1 ^FS^XZ" -X POST http://localhost:9669 & curl -i -H "Content-Type: x-application/zpl" --data "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 2 ^FS^XZ" -X POST http://localhost:9669
 
 > HTTP/1.1 200 OK
 > X-Powered-By: Express
