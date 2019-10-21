@@ -109,7 +109,7 @@ export class Manager extends EventEmitter {
           // Access the device via node-usb.
           const _device = usb.findByIds(device.vendorId, device.productId);
           if (!_device) {
-            return reject(new Error('Cihaza bulunamadı'));
+            throw new Error('Device not found.');
           }
           _device.open();
 
@@ -117,7 +117,8 @@ export class Manager extends EventEmitter {
 
           if (!_interface) {
             _device.close();
-            return reject(new Error('Cihaza ulaşılamıyor. Başka açık programları kapatıp tekrar deneyin'));
+            // tslint:disable-next-line: max-line-length
+            throw new Error(`Can not claim the device's interface. Device might be claimed by another program. Try to close it.`);
           }
           _interface.claim();
 
