@@ -36,13 +36,14 @@ export class Manager extends EventEmitter {
     usbDetection.on('remove', (device) => {
       if (this._default && this._default.device.deviceAddress === device.deviceAddress) {
         this._default = undefined;
+        storage.remove('default-printer', (_) => null); // omit the error.
       }
       this.emit('change:remove', device);
     });
 
     // if default-printer exist try to select it.
-    storage.get('default-printer', (err, data: {id: number}) => {
-      this.defaultDevice(data.id).catch(() => {return; }); // ignore error.
+    storage.get('default-printer', (_, data: {id: number}) => {
+      this.defaultDevice(data.id).catch(() => null); // omit the error.
     });
 
   }
