@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "tsc && electron ./app/src/main.js",
     "dev:rebuild": "electron-builder install-app-deps",
-    "dist:build": "tsc && electron-builder build --win --publish never",
+    "dist:build": "tsc && electron-builder --win --publish never",
     "dist:publish": "tsc && electron-builder --win --publish always",
     "postinstall": "yarn dev:rebuild"
   },
@@ -46,6 +46,7 @@
     ],
     "icon": "./app/assets/icon/app.png",
     "win": {
+      "artifactName":"${productName}-${version}.${ext}",
       "target": [
         "nsis"
       ]
