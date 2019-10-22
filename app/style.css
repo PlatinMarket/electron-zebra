@@ -30,6 +30,7 @@ ul.devices{
 }
 
 ul.devices > li.device {
+  font-size: 14px;
   cursor:pointer;
   padding: 8px;
   border-bottom: 1px solid #dcdcdc;
@@ -62,19 +63,21 @@ div.info{
 }
 
 div.notifications {
-  /* background:rgba(255,0,0,0.4); */
   position: absolute;
+  padding:4px;
   width: 100%;
   bottom:0;
 }
 
 div.notifications > div.notification {
+  border-radius:4px;
+  margin-top:4px;
   opacity:0.6;
   font-size:12px;
-  padding:6px 12px;
+  padding:6px 6px;
   background-color:#F9F9FB;
   color:#234361;
-  border-top:1px solid currentColor;
+  border:1px solid currentColor;
   cursor: pointer;
 }
 
@@ -83,7 +86,7 @@ div.notifications > div.notification:hover{
 }
 
 div.notification::before{
-  content: '👻';
+  content: 'SYS';
   font-weight: bold;
   margin-right:8px;
 }
