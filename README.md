@@ -75,25 +75,39 @@ Configurate `package.json` for auto update releases.
 
 ## Publishing
 
+### Automated Publishing using dist:publish
 
-Create a Public GitHub repo for your poject. And change the `repository.url` in the `package.json` with your repo URL.
-
-Create new personal access token with the repo scope [__from here__](https://github.com/settings/tokens/new).
-
-Set `GH_TOKEN` environment variable with the token you've generated.
-
-You're ready to publish.
+1. Create a public GitHub repo for your poject. And change the `repository.url` in the `package.json` with your repo URL.
+2. Create new personal access token with the repo scope [__from here__](https://github.com/settings/tokens/new).
+3. Set `GH_TOKEN` environment variable with the token you've generated.
+4. You're ready to publish.
 
 ```sh
 $ yarn dist:publish
 ```
 
-Alternatively you can also define it just for the current shell session like the example below.
+Alternatively you can also define the `GH_TOKEN` just for the current shell session like the example below.
 
 ```sh
 $ export GH_TOKEN='########################################'
 $ yarn dist:publish
 ```
+
+### Manual Publishing
+
+Alternatively you can publish the generated files through github release manually.
+
+1. __Build__ your app with `yarn dist:build`.
+2. Go to GitHub __Releases__ in your repo.
+3. __Draft a new release__.
+   1. Enter __Tag Name__. ex. __v1.0.x__ (1.0.x builded app version)
+   2. Enter __Release Title__.
+   3. Enter __Description__.
+   4. Upload the generated files in the __./distribution__
+      1. Upload __latest.yml__.
+      2. Upload __APPNAME-1.0.x.exe__.
+      3. Upload __APPNAME-1.0.x.exe.blockmap__.
+4. __Publish Release__.
 
 ## Usage
 
