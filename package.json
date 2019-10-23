@@ -46,7 +46,7 @@
     ],
     "icon": "./app/assets/icon/app.png",
     "win": {
-      "artifactName":"${productName}-${version}.${ext}",
+      "artifactName":"${productName}-setup.${ext}",
       "target": [
         "nsis"
       ]
