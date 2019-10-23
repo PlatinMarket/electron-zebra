@@ -7,7 +7,7 @@
   "main": "./app/src/main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anotherglitchinthematrix/electron-zebra.git"
+    "url": "https://github.com/PlatinMarket/electron-zebra.git"
   },
   "scripts": {
     "dev": "tsc && electron ./app/src/main.js",
