@@ -5,12 +5,16 @@ electron-zebra is a small utility program that can handle print requests via a r
 It serves the API Endpoint at the port __65533__
 
 ## Table of Contents
-
+- [Installation](#Installation)
 - [Build](#Build)
   - [Scripts](#Scripts)
 - [Configuration](#Configuration)
   - [Publishing](#Publishing)
 - [Usage](#usage)
+
+## Installation
+
+Get the latest stable release [here](https://github.com/anotherglitchinthematrix/electron-zebra/releases/latest/download/Zebra-setup.exe) and install. 
 
 ## Build
 
