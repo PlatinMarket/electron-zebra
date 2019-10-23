@@ -14,7 +14,7 @@ It serves the API Endpoint at the port __65533__
 
 ## Installation
 
-Get the latest stable release [here](https://github.com/anotherglitchinthematrix/electron-zebra/releases/latest/download/Zebra-setup.exe) and install. 
+Get the latest stable release [here](https://github.com/PlatinMarket/electron-zebra/releases/latest/download/Zebra-setup.exe) and install. 
 
 ## Build
 
@@ -25,7 +25,7 @@ $ npm install -g --production windows-build-tools
 ```
 
 ```sh
-$ git clone https://github.com/anotherglitchinthematrix/electron-zebra
+$ git clone https://github.com/PlatinMarket/electron-zebra.git
 
 $ yarn
 
@@ -46,11 +46,11 @@ $ yarn dev:rebuild
 ```
 Build the installer without publishing to github.
 ```sh
-$ dist:build
+$ yarn dist:build
 ```
 Build the installer and publish to github. For this option you need to configurate the `package.json`
 ```sh
-$ dist:publish
+$ yarn dist:publish
 ```
 
 ## Configuration
@@ -109,8 +109,8 @@ Alternatively you can publish the generated files through github release manuall
    3. Enter __Description__.
    4. Upload the generated files in the __./distribution__
       1. Upload __latest.yml__.
-      2. Upload __APPNAME-1.0.x.exe__.
-      3. Upload __APPNAME-1.0.x.exe.blockmap__.
+      2. Upload __APPNAME-setup.exe__.
+      3. Upload __APPNAME-setup.exe.blockmap__.
 4. __Publish Release__.
 
 ## Usage
