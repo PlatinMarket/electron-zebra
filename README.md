@@ -14,7 +14,7 @@ It serves the API Endpoint at the port __65533__
 
 ## Installation
 
-Get the latest stable release [here](https://github.com/PlatinMarket/electron-zebra/releases/latest/download/Zebra-setup.exe) and install. 
+Get the latest stable release from [here](https://github.com/PlatinMarket/electron-zebra/releases/latest/download/Zebra-setup.exe) and install. 
 
 ## Build
 
@@ -36,7 +36,7 @@ $ npm install
 
 ## Scripts
 
-Build and execute the electron app in development.
+Build and execute the electron app in development mode.
 ```sh
 $ yarn dev
 ```
@@ -48,7 +48,7 @@ Build the installer without publishing to github.
 ```sh
 $ yarn dist:build
 ```
-Build the installer and publish to github. For this option you need to configurate the `package.json`
+Build the installer and release it through github. For this option you need to configurate the `package.json`
 ```sh
 $ yarn dist:publish
 ```
@@ -67,7 +67,7 @@ Configurate `package.json` for auto update releases.
   ...
   "build": {
     "appId": "com.electron.<APP_NAME>",
-    "productName": "<APP_DISPLAY_NAME_>",
+    "productName": "<APP_DISPLAY_NAME>",
     ...
     "publish": {
       "provider": "github",
@@ -81,8 +81,8 @@ Configurate `package.json` for auto update releases.
 
 ### Automated Publishing using dist:publish
 
-1. Create a public GitHub repo for your poject. And change the `repository.url` in the `package.json` with your repo URL.
-2. Create new personal access token with the repo scope [__from here__](https://github.com/settings/tokens/new).
+1. Create a public GitHub repo for your project. And change the `repository.url` in the `package.json` with your repo URL.
+2. Create a new personal access token with the repo scope [__from here__](https://github.com/settings/tokens/new).
 3. Set `GH_TOKEN` environment variable with the token you've generated.
 4. You're ready to publish.
 
@@ -99,7 +99,7 @@ $ yarn dist:publish
 
 ### Manual Publishing
 
-Alternatively you can publish the generated files through github release manually.
+You can also publish the generated files through github release manually.
 
 1. __Build__ your app with `yarn dist:build`.
 2. Go to GitHub __Releases__ in your repo.
@@ -115,7 +115,7 @@ Alternatively you can publish the generated files through github release manuall
 
 ## Usage
 
-Get default device index and all the supported devices attached to the server system.
+Get the default device's index and all the supported devices attached to the server system.
 
 ```
 REQUEST
@@ -160,7 +160,7 @@ $ curl -i -H "Accept: application/json" <ip>:65533
 
 ```
 
-Set a default device to handle print requests that sent without a target.
+Set the default device to handle print requests that sent without a target device.
 
 ```
 REQUEST
@@ -191,7 +191,7 @@ curl -i -H "Content-Type: x-application/zpl" -H "x-default-printer: 0" -X POST <
 > "Default printer succesfully set."
 ```
 
-Send print request to default device.
+Send print request to the default device.
 
 ```
 REQUEST
@@ -248,7 +248,7 @@ $ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0
 > Content-Length: 0
 ```
 
-cURL Example: concurrent print request example to default device and a targeted device.
+cURL Example: concurrent print request to the default device and a targeted device.
 
 ```sh
 $ curl -i -H "Content-Type: x-application/zpl" -H "x-printer: 0" --data "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 1 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 1 ^FS^XZ" -X POST http://localhost:65533 & curl -i -H "Content-Type: x-application/zpl" --data "^XA^CF0,30^FO220,115^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,155^FD CONCURRENT PRINT REQUEST 2 ^FS^FO220,195^FD CONCURRENT PRINT REQUEST 2 ^FS^XZ" -X POST http://localhost:65533
