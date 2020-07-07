@@ -22,7 +22,7 @@
     "@types/express": "^4.17.1",
     "@types/mithril": "^2.0.0",
     "@types/usb": "^1.5.1",
-    "electron": "^6.0.12",
+    "electron": "^7.2.4",
     "electron-builder": "^21.2.0",
     "typescript": "^3.6.4"
   },
